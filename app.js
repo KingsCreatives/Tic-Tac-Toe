@@ -43,7 +43,13 @@ function InitializeGame(data){
 
 //
 function playMove(box,data){
-    
+    //Verify if game is over
+    if(data.gameOver 
+        || data.board[box.id] === "X" 
+        || data.board[box.id] === "O") return;
+
+        data.board[box.id] = data.currentPlayer;
+        box.textContent = data.currentPlayer;
     console.log(box,data);
 }
 
