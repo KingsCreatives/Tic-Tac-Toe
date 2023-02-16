@@ -24,7 +24,7 @@ form.addEventListener('submit', (event) =>{
 
 
 //Variables for Game
-function gameVariables(data){
+const gameVariables = (data) => {
     data.choice = Number(data.choice);
     data.board = [0,1,2,3,4,5,6,7,8];
     data.player1Marker = "X";
@@ -35,7 +35,7 @@ function gameVariables(data){
 };
 
 //Eventlistner on Gameboard
-function addEventListenerToGameBoard(data) {
+const addEventListenerToGameBoard = (data) => {
     const gameBox = document.querySelectorAll('.box');
     gameBox.forEach(box => {
         box.addEventListener('click', (event) =>{
@@ -46,7 +46,7 @@ function addEventListenerToGameBoard(data) {
 
 
 //Initialize Game
-function InitializeGame(data){
+const InitializeGame = (data) => {
     gameVariables(data);
     addEventListenerToGameBoard(data);
     console.log(data);
@@ -54,7 +54,7 @@ function InitializeGame(data){
 
 
 //
-function playMove(box,data){
+const  playMove = (box,data) => {
     //Verify if game is over
     if(data.gameOver 
         || data.round > 8
@@ -75,7 +75,27 @@ function playMove(box,data){
 }
 
 //End Game Conditions
-function endGameConditions(data){
+const endGameConditions = (data) => {
+    //check if there is a winner
+    if(checkWinner(data)){
+        return true;
+    } else if (data.round === 9){
+        return true;
+    } else{
+        return false;
+    }
+}
 
+//Check the winner of Game Round
+ const  checkWinner = (data) => {
+    let gameHasWinner = false;
+
+    gameWinConditions.forEach(condition =>{
+        if(data.board[condition[0]] === data.board[condition[1]] && data.board[condition[1]] === data.board[condition[2]]){
+            console.log("Winner");
+        }
+    });
+
+    return gameHasWinner;
 }
 
