@@ -71,7 +71,19 @@ const playMove = (box, data)=> {
     if(endConditions(data)){
         return;
     };
+
+    //Chnage Player
+    changePlayer(data);
 };
+
+//Change Current player
+const changePlayer = (data) =>{
+    data.currentPlayer = data.currentPlayer === "X"? "O" : "X";
+
+    let playerTurn = data.currentPlayer === "X"? data.player1Name: data.player2Name;
+
+    adjustDom('displayTurn', `${playerTurn}'s turn`);
+}
 
 
 //Game End Conditions
@@ -115,3 +127,5 @@ const adjustDom = (className, textContent) =>{
  const element = document.querySelector(`.${className}`);
  element.textContent = textContent;
 };
+
+
