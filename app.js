@@ -37,8 +37,22 @@ const initializeGame = (data) =>{
  text.textContent = `${data.player1Name}'s turn`;
  gameVariables(data);
  gameBoardEvents(data);
-console.log(data);
 }
 
-//set win condition
+// Play Move
+const playMove = (box, data)=> {
+    //Check If Game Over
+    if(data.gameOver || data.round > 8) return;
+    
+    //Check If Box is empty
+    if(data.gameBoard[box.id] === "X" || data.gameBoard[box.id] === "O") return;
+
+    //Adjust DOM for player move, and check Win condition
+    data.gameBoard[box.id] = data.currentPlayer;
+    box.textContent = data.currentPlayer;
+    box.classList.add(data.currentPlayer === "X"? "player1": "player2");
+    data.round++;
+    console.log(box,data)
+}
+
 
