@@ -69,8 +69,8 @@ const playMove = (box, data)=> {
 
     //Check End Conditions
     if(endConditions(data)){
-        
-    }
+        return;
+    };
 };
 
 
@@ -78,12 +78,19 @@ const playMove = (box, data)=> {
 const endConditions = (data) =>{
   //Winner
     if(checkWinner(data)){
+        let winner = data.currentPlayer === "X"? data.player1Name: data.player2Name;
+        adjustDom('displayTurn', winner +  " has won! ");
+        data.gameOver = true;
         return true;
-    } else if(data.round === 9){
+    } 
+    //Tie
+    else if(data.round === 9){
+        adjustDom('displayTurn',"It's a Tie!");
+        data.gameOver = true;
         return true;
     }
     return false;
-  //Tie
+  
 }
 
 
@@ -100,4 +107,11 @@ const checkWinner = (data) =>{
     })
 
     return gameHasWinner;
-}
+};
+
+
+//Adjust Dom
+const adjustDom = (className, textContent) =>{
+ const element = document.querySelector(`.${className}`);
+ element.textContent = textContent;
+};
