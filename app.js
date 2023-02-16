@@ -25,10 +25,10 @@ form.addEventListener('submit', (event) =>{
 
 //Variables for Game
 const gameVariables = (data) => {
-    data.choice = ++data.choice;
+    data.choice = +data.choice;
     data.board = [0,1,2,3,4,5,6,7,8];
-    data.player1Marker = "X";
-    data.player2Marker = "O";
+    data.player1 = "X";
+    data.player2 = "O";
     data.gameRound = 0;
     data.currentPlayer = "X";
     data.gameOver = false;
@@ -55,6 +55,11 @@ const InitializeGame = (data) => {
 
 //
 const  playMove = (box,data) => {
+
+    if(data.gameOver || data.round > 8){
+        return;
+    }
+    
     //Verify if game is over
     if(data.gameOver 
         || data.round >= 9
@@ -62,28 +67,36 @@ const  playMove = (box,data) => {
         || data.board[box.id] === "O"
         ) return;
 
-        data.board[box.id] = data.currentPlayer;
-        box.textContent = data.currentPlayer;
-        box.classList.add(data.currentPlayer === "X"? "player1": "player2");
-        data.round++;
      console.log(box,data);
 
-    //End Game
-    if(endGameConditions(data)){
+     data.board[box.id] = data.currentPlayer;
+     box.textContent = data.currentPlayer;
+     box.classList.add(data.currentPlayer === "X"? "player1": "player2");
+     data.round++;
 
-    };
+     //Check end conditions
+      if(endGameConditions(data)){
+        return true;
+      }
+
+      
 }
 
 //End Game Conditions
 const endGameConditions = (data) => {
     //check if there is a winner
     if(checkWinner(data)){
+
+        let winnerName = data.currentPlayer === "X"? data.player1Name : data.player2Name;
+
+       adjustDom('displayTurn', `${winnerName} has Won!`);
         return true;
     } else if (data.round === 9){
+        adjustDom('displayTurn', "It's a Tie" );
+        data.gameOver = true;
         return true;
-    } else{
-        return false;
-    }
+    } 
+    return false;
 }
 
 //Check the winner of Game Round
@@ -91,12 +104,18 @@ const endGameConditions = (data) => {
     let gameHasWinner = false;
 
     gameWinConditions.forEach(condition =>{
-        if(data.board[condition[0]] === data.board[condition[1]] && data.board[condition[1]] === data.board[condition[2]]){
+       if(data.board[condition[0]] === data.board[condition[1]] && data.board[condition[1]] === data.board[condition[2]]){
             gameHasWinner = true;
             data.gameOver = true;
         }
     });
 
     return gameHasWinner;
+};
+
+//Adjust DOM
+const adjustDom = (className, textContent) =>{
+    const el = document.querySelector(`.${className}`);
+          el.textContent = textContent;
 }
 
