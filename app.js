@@ -25,12 +25,12 @@ form.addEventListener('submit', (event) =>{
 
 //Variables for Game
 const gameVariables = (data) => {
-    data.choice = Number(data.choice);
+    data.choice = ++data.choice;
     data.board = [0,1,2,3,4,5,6,7,8];
     data.player1Marker = "X";
     data.player2Marker = "O";
     data.gameRound = 0;
-    data.currentPlayer = data.player1Marker;
+    data.currentPlayer = "X";
     data.gameOver = false;
 };
 
@@ -57,7 +57,7 @@ const InitializeGame = (data) => {
 const  playMove = (box,data) => {
     //Verify if game is over
     if(data.gameOver 
-        || data.round > 8
+        || data.round >= 9
         || data.board[box.id] === "X" 
         || data.board[box.id] === "O"
         ) return;
@@ -66,7 +66,7 @@ const  playMove = (box,data) => {
         box.textContent = data.currentPlayer;
         box.classList.add(data.currentPlayer === "X"? "player1": "player2");
         data.round++;
-    console.log(box,data);
+     console.log(box,data);
 
     //End Game
     if(endGameConditions(data)){
@@ -92,7 +92,8 @@ const endGameConditions = (data) => {
 
     gameWinConditions.forEach(condition =>{
         if(data.board[condition[0]] === data.board[condition[1]] && data.board[condition[1]] === data.board[condition[2]]){
-            console.log("Winner");
+            gameHasWinner = true;
+            data.gameOver = true;
         }
     });
 
