@@ -17,7 +17,7 @@ form.addEventListener('submit', (event) =>{
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
-    const modal =document.querySelector('.modal-wrapper');
+    const modal = document.querySelector('.modal-wrapper');
     modal.style.display = "none";
     InitializeGame(data);
 });
@@ -47,9 +47,11 @@ const addEventListenerToGameBoard = (data) => {
 
 //Initialize Game
 const InitializeGame = (data) => {
+    let playerTurn = data.currentPlayer === "X"? data.player1Name : data.player2Name;
+    adjustDom('displayTurn', `${data.player1Name}'s turn`);
+
     gameVariables(data);
     addEventListenerToGameBoard(data);
-    console.log(data);
 }
 
 
@@ -79,7 +81,8 @@ const  playMove = (box,data) => {
         return true;
       }
 
-      
+      //Change Player
+      changePlayer(data);
 }
 
 //End Game Conditions
@@ -119,3 +122,11 @@ const adjustDom = (className, textContent) =>{
           el.textContent = textContent;
 }
 
+//Change Player
+const changePlayer  = (data) =>{
+    data.currentPlayer = data.currentPlayer === "X"? "O": "X";
+
+    let playerTurn = data.currentPlayer === "X"? data.player1Name : data.player2Name;
+
+    adjustDom('displayTurn', `${playerTurn}'s turn`);
+}
