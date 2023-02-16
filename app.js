@@ -1,3 +1,16 @@
+//Win conditions
+const winConditions = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [2,4,6]
+];
+
+
 //Event Listener to get user data
 const form = document.querySelector('.myForm');
 
@@ -53,6 +66,17 @@ const playMove = (box, data)=> {
     box.classList.add(data.currentPlayer === "X"? "player1": "player2");
     data.round++;
     console.log(box,data)
+
+    //Check End Conditions
+    if(endConditions(data)){
+        
+    }
+};
+
+
+//Game End Conditions
+const endConditions = (data) =>{
+
 }
 
 
