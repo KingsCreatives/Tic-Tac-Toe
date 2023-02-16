@@ -21,13 +21,24 @@ const gameVariables = (data) => {
     data.gameOver = false;
 }
 
+//Game Board Events
+const gameBoardEvents = (data) =>{
+    const box = document.querySelectorAll('.box');
+    box.forEach( item =>{
+        item.addEventListener('click', (event) =>{
+            playMove(event.target, data);
+        })
+    })
+}
 
 //Initialize Game
 const initializeGame = (data) =>{
  const text = document.querySelector('.displayTurn');
  text.textContent = `${data.player1Name}'s turn`;
  gameVariables(data);
-  console.log(data);
+ gameBoardEvents(data);
+console.log(data);
 }
 
 //set win condition
+
