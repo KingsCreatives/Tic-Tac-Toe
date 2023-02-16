@@ -76,7 +76,28 @@ const playMove = (box, data)=> {
 
 //Game End Conditions
 const endConditions = (data) =>{
-
+  //Winner
+    if(checkWinner(data)){
+        return true;
+    } else if(data.round === 9){
+        return true;
+    }
+    return false;
+  //Tie
 }
 
 
+//Check Game Winner
+const checkWinner = (data) =>{
+    let gameHasWinner = false;
+
+    winConditions.forEach(condition =>{
+        if(data.gameBoard[condition[0]] === data.gameBoard[condition[1]] 
+        && data.gameBoard[condition[1]] === data.gameBoard[condition[2]]){
+            gameHasWinner = true;
+            data.gameOver = true;
+        }
+    })
+
+    return gameHasWinner;
+}
