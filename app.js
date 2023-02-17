@@ -80,6 +80,10 @@ const playMove = (box, data)=> {
         //Easy Ai
         easyAiMove(data);
         data.currentPlayer = "X";
+    } else if(data.choice === 2){
+        //Hard Ai
+        unbeatableAi(data);
+        data.currentPlayer = "X";
     }
 };
 
@@ -138,20 +142,21 @@ const adjustDom = (className, textContent) =>{
 //Easy Ai Game Mode
 const easyAiMove = (data) =>{
     changePlayer(data);
-    
-    //Ai move after player 1 moves
+    data.round++;
+
+    //Check available sopt
+    let availableGameSpot = data.gameBoard.filter(
+        (spot) => spot !== "X" && spot !== "O"
+    );
+
+    let aiSpot = availableGameSpot[Math.floor(Math.random() * availableGameSpot.length)];
+    data.gameBoard[aiSpot] = data.player2;
+
     setTimeout(() =>{
-        let availableGameSpot = data.gameBoard.filter(
-            (spot) => spot !== "X" && spot !== "O"
-        );
-    
-        let aiSpot = availableGameSpot[Math.floor(Math.random() * availableGameSpot.length)];
-        data.gameBoard[aiSpot] = data.player2;
-    
+    //Ai move after player 1 moves
         let box = document.getElementById(`${aiSpot}`);
         box.textContent = data.player2;
         box.classList.add('player2');
-    
     }, 200);
 
     if(endConditions(data)){
@@ -159,6 +164,34 @@ const easyAiMove = (data) =>{
     }
 
     changePlayer(data);
+};
+
+
+//Unbeatable Ai
+const unbeatableAi = (data) =>{
+    data.round++;
+
+    minimax(data, "O")
 }
 
 
+//Minimax algorithm
+const minimax = (data,player)=> {
+    let spotsLeft = data.gameBoard.filter((spot) => spot !== "X" && spot !== "O");
+
+    const potentialMoves = [];
+
+    for(let i = 0; i < spotsLeft; i++){
+        let move = {};
+        move.index = data.gameBoard[spotsLeft[i]];
+
+        if(player === data.player2){
+            move.score = minimax(data, "X").score;
+        } else{
+            move.score = minimax(data, "O").score;
+        }
+
+        data.gameBoard[spotsLeft[i]] = move.index;
+        potentialMoves.push(move);
+    }
+}
