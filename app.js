@@ -73,7 +73,14 @@ const playMove = (box, data)=> {
     };
 
     //Chnage Player
-    changePlayer(data);
+    if(data.choice === 0){
+        //Human vs Human Game Mode
+        changePlayer(data);
+    } else if(data.choice === 1){
+        //Easy Ai
+        easyAiMove(data);
+        data.currentPlayer = "X";
+    }
 };
 
 //Change Current player
@@ -127,5 +134,31 @@ const adjustDom = (className, textContent) =>{
  const element = document.querySelector(`.${className}`);
  element.textContent = textContent;
 };
+
+//Easy Ai Game Mode
+const easyAiMove = (data) =>{
+    changePlayer(data);
+    
+    //Ai move after player 1 moves
+    setTimeout(() =>{
+        let availableGameSpot = data.gameBoard.filter(
+            (spot) => spot !== "X" && spot !== "O"
+        );
+    
+        let aiSpot = availableGameSpot[Math.floor(Math.random() * availableGameSpot.length)];
+        data.gameBoard[aiSpot] = data.player2;
+    
+        let box = document.getElementById(`${aiSpot}`);
+        box.textContent = data.player2;
+        box.classList.add('player2');
+    
+    }, 200);
+
+    if(endConditions(data)){
+        return;
+    }
+
+    changePlayer(data);
+}
 
 
