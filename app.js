@@ -46,6 +46,7 @@ const addEventListenerToGameBoard = (data) =>{
 
 //Initialize Game
 const initializeGame = (data) =>{
+ adjustDom('displayTurn', `${data.player1Name}'s turn`);
  gameVariables(data);
  addEventListenerToGameBoard(data);
 }
@@ -65,20 +66,31 @@ const playMove = (box, data) => {
   box.classList.add(data.currentPlayer === "X"? "player1": "player2");
   data.round++;
 
-  console.log(box,data);
 
   if(endConditions(data)){
     return;
   }
+
+  //Change player
+  changePlayer(data);
+}
+
+//Change Current Player
+const changePlayer = (data) =>{
+    data.currentPlayer = data.currentPlayer === "X"? "O" : "X";
+    let displayTurnText = data.currentPlayer === "X"? data.player1Name : data.player2Name;
+    adjustDom('displayTurn', `${displayTurnText}'s turn`);
 }
 
 
 const endConditions = (data) => {
     if(checkWinner(data)){
         let winnerName = data.currentPlayer === "X"? data.player1Name : data.player2Name;
-        adjustDom('displayTurn', winnerName + "has won!");
+        adjustDom('displayTurn', winnerName + " has won! ");
         return true;
     } else if(data.round === 9){
+        adjustDom('displayTurn',"It's a Tie!");
+        data.gameOver = true;
         return true;
     }
     return false;
