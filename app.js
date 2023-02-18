@@ -79,6 +79,11 @@ const playMove = (box, data) => {
   else if(data.choice === 1){
     easyAi(data);
     data.currentPlayer = "X";
+  } 
+  //Hard Ai
+  else if(data.choice === 2){
+    hardAi(data);
+    data.currentPlayer = "X";
   }
 }
 
@@ -91,7 +96,7 @@ const changePlayer = (data) =>{
 
 
 const endConditions = (data) => {
-    if(checkWinner(data)){
+    if(checkWinner(data, data.currentPlayer)){
         let winnerName = data.currentPlayer === "X"? data.player1Name : data.player2Name;
         adjustDom('displayTurn', winnerName + " has won! ");
         return true;
@@ -110,15 +115,15 @@ const adjustDom = (className, textContent) => {
 }
 
 
-const checkWinner = (data) => {
+const checkWinner = (data, player) => {
    let result = false;
 
    winConditions.forEach((condition) => {
-     if(data.board[condition[0]] === data.board[condition[1]] &&
-        data.board[condition[1]] === data.board[condition[2]]){
-            data.gameOver = true;
+     if(data.board[condition[0]] === player &&
+        data.board[condition[1]] === player &&
+        data.board[condition[2]] === player){
             result = true;
-
+             data.gameOver = true;
         }
    });
 
@@ -128,14 +133,16 @@ const checkWinner = (data) => {
 //Easy Ai
 const easyAi = (data) => {
    changePlayer(data);
-   
-   setTimeout(() =>{
+   data.round++;
+
     //Checking available spots on the gameboard
-   let availableSpots = data.board.filter( space => space !== "X" && space !== "O");
+    let availableSpots = data.board.filter( space => space !== "X" && space !== "O");
 
-   let move = availableSpots[Math.floor(Math.random() * availableSpots.length)];
-   data.board[move] = data.player2;
-
+    let move = availableSpots[Math.floor(Math.random() * availableSpots.length)];
+    data.board[move] = data.player2;
+ 
+    
+   setTimeout(() =>{
     let box = document.getElementById(`${move}`);
     box.textContent = data.player2;
     box.classList.add('player2'); 
@@ -145,4 +152,70 @@ const easyAi = (data) => {
     return;    
 }
    changePlayer(data);
+}
+
+//Hard Ai
+const hardAi = (data) =>{
+   data.round++; 
+
+ const move = minimax(data, "O").index;
+ data.board[move] = data.player2;
+
+ let box = document.getElementById(`${move}`);
+    box.textContent = data.player2;
+    box.classList.add('player2'); 
+
+ data.currentPlayer ="X";
+ console.log(move)
+}
+
+//minimax algorithm
+const minimax = (data,player) => {
+    let availableSpots = data.board.filter( space => space !== "X" && space !== "O");
+
+    if(checkWinner(data, data.player1)){
+        return { score: -100}
+    } else if(checkWinner(data, data.player2)){
+        return {score: 100}
+    } else if(availableSpots.length === 0){
+        return {score: 0}
+    }
+
+   const potentialMoves = [];
+
+   for(let i = 0; i < availableSpots.length ; i++ ){
+     let move = {};
+     move.index = data.board[availableSpots[i]];
+
+     data.board[availableSpots[i]] = player;
+
+     if(player === data.player2){
+        move.score = minimax(data, "X").score
+     } else{
+        move.score = minimax(data, "O").score
+     }
+     data.board[availableSpots[i]] = move.index;
+     potentialMoves.push(move);
+   }
+
+   let bestMove = 0;
+   if(player === data.player2){
+    let bestScore = -10000;
+    for(let i=0; i < potentialMoves.length; i++){
+       if(potentialMoves[i].score > bestScore) {
+        bestScore = potentialMoves[i].score;
+        bestMove = i;
+       }
+    }
+   } else if(player === data.player1){
+    let bestScore = 10000;
+    for(let i =0; i < potentialMoves.length; i++){
+        if(potentialMoves[i].score < bestScore){
+            bestScore = potentialMoves[i].score;
+            bestMove = i;
+        }
+    }
+   }
+   data.gameOver = false;
+   return potentialMoves[bestMove]
 }
