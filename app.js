@@ -75,12 +75,20 @@ const playMove = (box, data) => {
 
 const endConditions = (data) => {
     if(checkWinner(data)){
+        let winnerName = data.currentPlayer === "X"? data.player1Name : data.player2Name;
+        adjustDom('displayTurn', winnerName + "has won!");
         return true;
     } else if(data.round === 9){
         return true;
     }
     return false;
 };
+
+//Adjust Dom
+const adjustDom = (className, textContent) => {
+    const el = document.querySelector(`.${className}`);
+    el.textContent = textContent;
+}
 
 
 const checkWinner = (data) => {
@@ -89,7 +97,6 @@ const checkWinner = (data) => {
    winConditions.forEach((condition) => {
      if(data.board[condition[0]] === data.board[condition[1]] &&
         data.board[condition[1]] === data.board[condition[2]]){
-            console.log("Game Over");
             data.gameOver = true;
             result = true;
 
