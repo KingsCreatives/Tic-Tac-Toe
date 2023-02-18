@@ -83,7 +83,11 @@ const playMove = (box, data) => {
   //Hard Ai
   else if(data.choice === 2){
     hardAi(data);
-    data.currentPlayer = "X";
+    changePlayer(data);
+    if(endConditions(data)){
+        return
+    }
+    changePlayer(data)
   }
 }
 
@@ -166,7 +170,8 @@ const hardAi = (data) =>{
     box.classList.add('player2'); 
 
  data.currentPlayer ="X";
- console.log(move)
+
+ console.log(data)
 }
 
 //minimax algorithm
