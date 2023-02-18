@@ -71,8 +71,15 @@ const playMove = (box, data) => {
     return;
   }
 
-  //Change player
-  changePlayer(data);
+  //Human vs Human
+  if(data.choice === 0){
+      changePlayer(data);
+  } 
+  //Easy Ai
+  else if(data.choice === 1){
+    easyAi(data);
+    data.currentPlayer = "X";
+  }
 }
 
 //Change Current Player
@@ -116,4 +123,26 @@ const checkWinner = (data) => {
    });
 
    return result;
+}
+
+//Easy Ai
+const easyAi = (data) => {
+   changePlayer(data);
+   
+   setTimeout(() =>{
+    //Checking available spots on the gameboard
+   let availableSpots = data.board.filter( space => space !== "X" && space !== "O");
+
+   let move = availableSpots[Math.floor(Math.random() * availableSpots.length)];
+   data.board[move] = data.player2;
+
+    let box = document.getElementById(`${move}`);
+    box.textContent = data.player2;
+    box.classList.add('player2'); 
+   }, 300)
+
+   if(endConditions(data)){
+    return;    
+}
+   changePlayer(data);
 }
