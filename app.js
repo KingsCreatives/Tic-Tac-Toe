@@ -13,11 +13,11 @@ const winConditions = [
 
 //Event Listener to get user data
 const form = document.querySelector('.myForm');
+const modal = document.querySelector('.modal-wrapper');
 
 form.addEventListener('submit', (event)=>{
     event.preventDefault();
     const data = Object.fromEntries(new FormData(form));
-    const modal = document.querySelector('.modal-wrapper');
     modal.style.display = "none";
     initializeGame(data);
 });
@@ -40,6 +40,13 @@ const addEventListenerToGameBoard = (data) =>{
     box.forEach( item =>{
         item.addEventListener('click', (event) =>{
             playMove(event.target, data);
+        })
+    });
+
+    resetGameBtn.addEventListener('click', () =>{
+        initializeGame(data);
+        box.forEach( item =>{
+            item.textContent = " ";
         })
     })
 }
@@ -224,3 +231,14 @@ const minimax = (data,player) => {
    data.gameOver = false;
    return potentialMoves[bestMove]
 }
+
+//Reload Game 
+const newGameBtn = document.querySelector('.newGame');
+newGameBtn.addEventListener('click', () =>{
+    window.location.reload();
+});
+
+//Clear boxes
+const resetGameBtn = document.querySelector('.resetBtn');
+
+
