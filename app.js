@@ -35,7 +35,7 @@ const gameVariables = (data) => {
 }
 
 //Game Board Events
-const gameBoardEvents = (data) =>{
+const addEventListenerToGameBoard = (data) =>{
     const box = document.querySelectorAll('.box');
     box.forEach( item =>{
         item.addEventListener('click', (event) =>{
@@ -49,6 +49,6 @@ const initializeGame = (data) =>{
  const text = document.querySelector('.displayTurn');
  text.textContent = `${data.player1Name}'s turn`;
  gameVariables(data);
- gameBoardEvents(data);
+ addEventListenerToGameBoard(data);
 }
 
