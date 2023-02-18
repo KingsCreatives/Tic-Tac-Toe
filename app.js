@@ -46,8 +46,6 @@ const addEventListenerToGameBoard = (data) =>{
 
 //Initialize Game
 const initializeGame = (data) =>{
- const text = document.querySelector('.displayTurn');
- text.textContent = `${data.player1Name}'s turn`;
  gameVariables(data);
  addEventListenerToGameBoard(data);
 }
@@ -68,5 +66,35 @@ const playMove = (box, data) => {
   data.round++;
 
   console.log(box,data);
+
+  if(endConditions(data)){
+    return;
+  }
 }
 
+
+const endConditions = (data) => {
+    if(checkWinner(data)){
+        return true;
+    } else if(data.round === 9){
+        return true;
+    }
+    return false;
+};
+
+
+const checkWinner = (data) => {
+   let result = false;
+
+   winConditions.forEach((condition) => {
+     if(data.board[condition[0]] === data.board[condition[1]] &&
+        data.board[condition[1]] === data.board[condition[2]]){
+            console.log("Game Over");
+            data.gameOver = true;
+            result = true;
+
+        }
+   });
+
+   return result;
+}
